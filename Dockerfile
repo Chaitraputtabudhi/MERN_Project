@@ -1,5 +1,5 @@
 # Stage 1: Build frontend
-FROM node:18 AS client-builder
+FROM node:22.2.0 AS client-builder
 WORKDIR /app
 COPY client/package*.json ./client/
 RUN cd client && npm install
@@ -7,7 +7,7 @@ COPY client ./client
 RUN cd client && npm run build
 
 # Stage 2: Build backend
-FROM node:18
+FROM node:18.20.8
 WORKDIR /app
 
 # Copy backend package.json first to install dependencies
@@ -18,7 +18,7 @@ RUN cd server && npm install
 COPY server ./server
 
 # Copy frontend build output into backend/public (so Express can serve it)
-COPY --from=client-builder /app/client/build ./server/public
+COPY --from=client-builder /app/client/dist ./server/public
 
 # Set environment variables (adjust as needed)
 ENV PORT=5000
