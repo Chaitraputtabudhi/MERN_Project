@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        IMAGE_NAME = 'chaitraputtabudhi/mern-project'
+        IMAGE_NAME = 'chaitraputtabudhi/mern-project-new'
     }
 
     stages {
