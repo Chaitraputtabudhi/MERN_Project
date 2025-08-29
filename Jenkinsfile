@@ -16,7 +16,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 dir('MERN-Project') {
-                    sh "sudo docker build -t ${IMAGE_NAME}:latest ."
+                    sh "docker build -t ${IMAGE_NAME}:latest ."
                 }        
             }
         }
