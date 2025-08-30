@@ -34,10 +34,22 @@ pipeline {
         }
 
         stage('Deploy') {
-            steps {
-                sh 'echo "Deploying the application..."'
-            }
-        }
+    steps {
+        sh '''
+            echo "Deploying the application..."
+
+            # Stop & remove old container if it exists
+            docker rm -f mern-app || true
+
+            # Run new container from built image
+            docker run -d --name mern-app \
+              -p 5000:5000 \
+              -e PORT=5000 \
+              -e MONGO_URI=mongodb://mongo:27017/mern_db \
+              ${IMAGE_NAME}:latest
+        '''
+    }
+}
     }
 
     post {
