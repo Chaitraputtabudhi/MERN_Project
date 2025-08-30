@@ -8,7 +8,7 @@ const PORT = process.env.PORT || 3000;
 
 
 
-mongoose.connect("mongodb://127.0.0.1:27017/basic-mern-app", {
+mongoose.connect("mongodb://mongo:27017/basic-mern-app", {
     useNewUrlParser: true,
     useUnifiedTopology: true
 }).then(() => {
@@ -19,6 +19,10 @@ app.use(cors());
 
 
 app.use(courseroutes);
+
+app.get("/", (req, res) => {
+    res.send("Backend is running 🚀");
+});
 
 app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}`);
