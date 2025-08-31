@@ -45,7 +45,7 @@ pipeline {
             docker run -d --name mern-app \
               -p 5000:5000 \
               -e PORT=5000 \
-              -e MONGO_URI=mongodb://mongo:27017/mern_db \
+              -e MONGO_URI=mongodb://mongo:27017/basic-mern-app \
               ${IMAGE_NAME}:latest
         '''
     }
