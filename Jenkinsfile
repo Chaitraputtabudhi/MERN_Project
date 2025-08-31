@@ -32,6 +32,27 @@ pipeline {
                 }
             }
         }
+        stage('Start MongoDB') {
+    steps {
+        sh '''
+            echo "Starting MongoDB container..."
+
+            # Create shared network if not exists
+            docker network create mern-net || true
+
+            # Stop & remove old MongoDB container if it exists
+            docker rm -f mongo || true
+
+            # Start MongoDB container on shared network
+            docker run -d --name mongo \
+              --network mern-net \
+              -p 27017:27017 \
+              mongo
+        '''
+    }
+}
+
+        
 
         stage('Deploy') {
     steps {
@@ -43,6 +64,7 @@ pipeline {
 
             # Run new container from built image
             docker run -d --name mern-app \
+              --network mern-net \
               -p 5000:5000 \
               -e PORT=5000 \
               -e MONGO_URI=mongodb://mongo:27017/basic-mern-app \
@@ -58,19 +80,18 @@ pipeline {
             # Copy JSON file into Mongo container
             docker cp server/data/courses.json mongo:/data/courses.json
 
-            # Check if collection is empty
-            EXISTING=$(docker exec mongo mongosh --quiet --eval "db.mern_app.countDocuments()" basic-mern-app)
+EXISTING=$(docker exec mongo mongosh --quiet --eval "db.mern_app.countDocuments()" basic-mern-app)
 
-            if [ "$EXISTING" -eq 0 ]; then
-              echo "Seeding data..."
-              docker exec mongo mongoimport \
-                --db basic-mern-app \
-                --collection mern_app \
-                --file /data/courses.json \
-                --jsonArray
-            else
-              echo "Data already exists. Skipping seeding."
-            fi
+if [ "$EXISTING" -eq 0 ]; then
+  echo "Seeding data..."
+  docker exec mongo mongoimport \
+    --db basic-mern-app \
+    --collection mern_app \
+    --file /data/courses.json \
+    --jsonArray
+else
+  echo "Data already exists. Skipping seeding."
+fi
         '''
     }
 }
