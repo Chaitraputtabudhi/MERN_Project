@@ -22,7 +22,7 @@ COPY --from=client-builder /app/client/dist ./server/public
 
 # Set environment variables (adjust as needed)
 ENV PORT=5000
-ENV MONGO_URI=mongodb://mongo:27017/mern_db
+ENV MONGO_URI=mongodb://mongo:27017/basic-mern-app
 
 # Expose port
 EXPOSE 5000

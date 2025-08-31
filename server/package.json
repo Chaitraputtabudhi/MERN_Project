@@ -3,10 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-  "start": "cross-env NODE_OPTIONS=--max-old-space-size=2048 nodemon index.js",
-  "test": "echo \"Error: no test specified\" && exit 1"
-}
-,
+    "start": "cross-env NODE_OPTIONS=--max-old-space-size=2048 nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -16,6 +15,7 @@
     "express": "^5.1.0",
     "mongodb": "^6.18.0",
     "mongoose": "^8.18.0",
+    "mongoose-plugin-autoinc": "^1.1.9",
     "nodemon": "^3.1.10"
   },
   "devDependencies": {

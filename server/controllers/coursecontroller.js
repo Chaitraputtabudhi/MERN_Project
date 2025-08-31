@@ -7,15 +7,21 @@ module.exports.loadAllCourses = async (req, res) => {
         const result = await CourseModel.find();
         res.header("Access-Control-Allow-Origin", "*");
         res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-        res.json(results);
+        res.json(result);
     } catch (error) {
         console.log(error);
     }
 }
 
 const insertCourses = async () => {
-    await CourseModel.insertMany(data, (err, elem) => {
-        if (!err) console.log("Course Inserted Successfully with elements \n" + elem);
-        else console.log("Error inserting courses: " + err);
-    });
+  try {
+    const inserted = await CourseModel.insertMany(data, { ordered: false }); 
+    console.log("Courses inserted successfully:", inserted.length);
+  } catch (err) {
+    if (err.code === 11000) {
+      console.warn("Duplicate entries detected. Skipping insert.");
+    } else {
+      console.error("Error inserting courses:", err);
+    }
+  }
 };

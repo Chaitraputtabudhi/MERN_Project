@@ -1,13 +1,36 @@
 const mongoose = require("mongoose");
+const { autoIncrement } = require('mongoose-plugin-autoinc');
 
 const CourseSchema = new mongoose.Schema({
-    title:String,
-    author:String,
-    free:Boolean,
-    overview:String,
-    img:String,
-    url:String
-
+    id: {
+        type: Number,
+        unique: true,
+    },
+    title: {
+        type: String,
+        required: true
+    },
+    author: {
+        type: String,
+        required: true,
+    },
+    free: {
+        type: Boolean,
+        required: true,
+    },
+    overview: {
+        type: String,
+        required: true,
+    },
+    img: {
+        type: String,
+        required: true,
+    },
+    url: {
+        type: Boolean,
+        required: true,
+    },
 });
 
+CourseSchema.plugin(autoIncrement, {model: 'CourseSchema', field: 'id', startAt: 1, incrementBy: 1});
 module.exports = mongoose.model("CourseModel", CourseSchema);

@@ -8,10 +8,7 @@ const PORT = process.env.PORT || 5000;
 
 
 
-mongoose.connect("mongodb://mongo:27017/basic-mern-app", {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-}).then(() => {
+mongoose.connect("mongodb://mongo:27017/basic-mern-app").then(() => {
     console.log('Connected to the Database');
 }).catch((err) => console.log(err));
 
@@ -20,8 +17,12 @@ app.use(cors());
 
 app.use(courseroutes);
 
-app.get("/", (req, res) => {
-    res.send("Backend is running 🚀");
+const path = require('path');
+
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 app.listen(PORT, () => {
