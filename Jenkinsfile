@@ -75,23 +75,28 @@ pipeline {
        stage('Seed MongoDB') {
     steps {
         sh '''
+            echo "Waiting for MongoDB to be ready..."
+            until docker exec mongo mongosh --quiet --eval "db.stats()" basic-mern-app; do
+              echo "MongoDB not ready yet..."
+              sleep 5
+            done
+
             echo "Checking if MongoDB needs seeding..."
 
-            # Copy JSON file into Mongo container
             docker cp server/data/courses.json mongo:/data/courses.json
 
-EXISTING=$(docker exec mongo mongosh --quiet --eval "db.mern_app.countDocuments()" basic-mern-app)
+            EXISTING=$(docker exec mongo mongosh --quiet --eval "db.mern_app.countDocuments()" basic-mern-app)
 
-if [ "$EXISTING" -eq 0 ]; then
-  echo "Seeding data..."
-  docker exec mongo mongoimport \
-    --db basic-mern-app \
-    --collection mern_app \
-    --file /data/courses.json \
-    --jsonArray
-else
-  echo "Data already exists. Skipping seeding."
-fi
+            if [ "$EXISTING" -eq 0 ]; then
+              echo "Seeding data..."
+              docker exec mongo mongoimport \
+                --db basic-mern-app \
+                --collection mern_app \
+                --file /data/courses.json \
+                --jsonArray
+            else
+              echo "Data already exists. Skipping seeding."
+            fi
         '''
     }
 }
