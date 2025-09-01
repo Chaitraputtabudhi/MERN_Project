@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+            const mongoose = require("mongoose");
 const { autoIncrement } = require('mongoose-plugin-autoinc');
 
 const CourseSchema = new mongoose.Schema({
@@ -30,7 +30,7 @@ const CourseSchema = new mongoose.Schema({
         type: Boolean,
         required: true,
     },
-});
+},{ collection: "CourseModel" });
 
-CourseSchema.plugin(autoIncrement, {model: 'CourseSchema', field: 'id', startAt: 1, incrementBy: 1});
+CourseSchema.plugin(autoIncrement, {model: 'CourseModel', field: 'id', startAt: 1, incrementBy: 1});
 module.exports = mongoose.model("CourseModel", CourseSchema);
