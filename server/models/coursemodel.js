@@ -27,7 +27,7 @@ const CourseSchema = new mongoose.Schema({
         required: true,
     },
     url: {
-        type: Boolean,
+        type: String,
         required: true,
     },
 },{ collection: "CourseModel" });
