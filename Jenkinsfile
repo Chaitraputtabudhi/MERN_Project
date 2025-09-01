@@ -91,7 +91,7 @@ pipeline {
               echo "Seeding data..."
               docker exec mongo mongoimport \
                 --db basic-mern-app \
-                --collection mern_app \
+                --collection CourseModel \
                 --file /data/courses.json \
                 --jsonArray
             else
